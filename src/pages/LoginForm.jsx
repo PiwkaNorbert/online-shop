@@ -33,7 +33,7 @@ export default function LoginForm({ endpoint }) {
       if (endpoint === "login") {
         const data = await response.json();
         sessionStorage.setItem("token", data.token);
-        return (window.location.href = "/category");
+        return (window.location.href = "/categories");
       }
     } catch (error) {
       console.error(error);
@@ -44,7 +44,7 @@ export default function LoginForm({ endpoint }) {
   };
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
-      <div className="rounded-2xl border border-white/10 bg-bkg-2 py-5 text-slate-300">
+      <div className="rounded-2xl border border-slate-200/20 bg-bkg-2 py-5 text-slate-300">
         <h1 className="mb-3 text-3xl ">
           {endpoint === "login" ? "Log in" : "Sign up"}
         </h1>
@@ -59,7 +59,7 @@ export default function LoginForm({ endpoint }) {
             type="text"
             id="login_name"
             name="name"
-            className="mb-3 rounded-md"
+            className="mb-3 rounded-md border border-slate-200/20"
             value={name}
             onChange={(e) => {
               setName(e.target.value);
@@ -71,14 +71,18 @@ export default function LoginForm({ endpoint }) {
             type="password"
             id="login__password"
             name="passowrd"
-            className="mb-3 rounded-md"
+            className="mb-3 rounded-md border border-slate-200/20"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
             required
           />
-          <button type="submit" value="Submit" className="bg-black/90">
+          <button
+            type="submit"
+            value="Submit"
+            className="border-slate-200/20 bg-black/90"
+          >
             Send magic link
           </button>
           <span className="mt-3 px-12 text-center">

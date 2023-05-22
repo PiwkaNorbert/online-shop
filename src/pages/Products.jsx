@@ -1,12 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Products = () => {
   const { productName } = useParams();
   const token = sessionStorage.getItem("token");
 
-  if (!token) return (window.location.href = "/login");
+  useEffect(() => {
+    if (token === null) {
+      console.log(" No token, Please login");
+      window.location = "/";
+    }
+  }, [token]);
 
   const productQuery = useQuery(
     ["category", "productName", productName],
@@ -29,34 +34,29 @@ const Products = () => {
   if (productQuery.isLoading) return <div>Loading...</div>;
   if (productQuery.isError) return <div>Error... {productQuery.error}</div>;
   return (
-    <div className="flex flex-col ">
-      <h1>Product</h1>
+    <div className="flex h-screen w-full flex-col text-slate-200">
+      <h1 className="mb-8 mt-12">Products</h1>
       <div
-        className=" flex flex-wrap items-center justify-center gap-1 "
+        className=" flex  items-center justify-center gap-4  "
         onClick={(e) => {
           navigate(`/product/${e.target.closest(".is-item").dataset.item}`);
         }}
       >
         {productQuery?.data.map(
-          ({ id, product_name, product_img_url, price, description }) => {
+          ({ id, product_name, product_img_url, price }) => {
             return (
               <div
                 key={id}
                 data-item={id}
-                className="font-md is-item group  flex cursor-pointer flex-col self-center rounded-lg border border-slate-200 p-2 text-slate-200 hover:text-[#747bff]"
+                className="font-md is-item group flex h-[150px] w-[150px] cursor-pointer flex-col items-center self-center rounded-lg border border-slate-200/20 p-2  hover:text-white"
               >
-                <a>
-                  <img
-                    className="aspect-w-3 aspect-h-2 h-24 w-24 "
-                    src={product_img_url}
-                    alt={product_name}
-                  />
-                  <p className="font-bold">{price}</p>
-                  <p className="text-md">{product_name}</p>
-                  <p className=" isolate block group-hover:block ">
-                    description {description}
-                  </p>
-                </a>
+                <img
+                  className=" max-w-24  object-fit h-[88px]  rounded-lg  object-cover "
+                  src={product_img_url}
+                  alt={product_name}
+                />
+                <p className="font-bold">&#36;{price}</p>
+                <p className="text-md">{product_name}</p>
               </div>
             );
           }

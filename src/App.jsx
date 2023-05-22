@@ -1,7 +1,7 @@
 import "./input.css";
 import Login from "./pages/Login";
 
-import Category from "./pages/Category";
+import Categories from "./pages/Categories";
 import Products from "./pages/Products";
 import Homepage from "./pages/Homepage";
 
@@ -9,6 +9,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./pages/Register";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProductItem from "./pages/ProductItem";
+import Cart from "./pages/Cart";
+import Header from "./comp/Header";
 
 const router = createBrowserRouter([
   {
@@ -24,16 +26,35 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/category",
-    element: <Category />,
+    path: "/categories",
+    element: (
+      <>
+        <Header />
+        <Categories />
+      </>
+    ),
   },
   {
     path: "/category/:productName/",
-    element: <Products />,
+    element: (
+      <>
+        <Header />
+        <Products />
+      </>
+    ),
   },
   {
     path: "/product/:productId/",
-    element: <ProductItem />,
+    element: (
+      <>
+        <Header />
+        <ProductItem />
+      </>
+    ),
+  },
+  {
+    path: "/cart/",
+    element: <Cart />,
   },
 ]);
 const queryClient = new QueryClient();

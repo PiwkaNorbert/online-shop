@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Category = () => {
   const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    if (token === null) {
+      console.log(" No token, Please login");
+      window.location.pathname = "/";
+    }
+  }, [token]);
 
   const categoryQuery = useQuery(["category"], () =>
     fetch("http://192.168.15.115:7777/categories/?format=json", {
@@ -20,15 +27,18 @@ const Category = () => {
   if (categoryQuery.isLoading) return <div>Loading...</div>;
   if (categoryQuery.isError) return <div>Error... {categoryQuery.error}</div>;
   return (
-    <div className="flex flex-col ">
-      <h1>Category</h1>
-      <div onClick={(e) => navigate(`/category/${e.target.innerText}`)}>
+    <div className=" flex h-screen w-full flex-col items-center text-slate-200 ">
+      <h1 className="mb-8 mt-12">Categories</h1>
+      <div
+        className=" mt-6 flex gap-2 rounded-2xl "
+        onClick={(e) => navigate(`/category/${e.target.innerText}`)}
+      >
         {categoryQuery?.data.map((category) => {
           return (
             <a
               key={category.id}
               // href="/category/product/me/"
-              className="font-md "
+              className="font-md cursor-pointer rounded-md border border-white/10 bg-bkg-2 px-5 py-3 hover:text-white "
             >
               {category.category_name}
             </a>
