@@ -11,6 +11,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProductItem from "./pages/ProductItem";
 import Cart from "./pages/Cart";
 import Header from "./comp/Header";
+import OrderSuccess from "./pages/OrderSuccess";
+import Orders from "./pages/Orders";
+import Order from "./pages/Order";
 
 const router = createBrowserRouter([
   {
@@ -54,7 +57,39 @@ const router = createBrowserRouter([
   },
   {
     path: "/cart/",
-    element: <Cart />,
+    element: (
+      <>
+        <Header />
+        <Cart />
+      </>
+    ),
+  },
+  {
+    path: "/order-success/",
+    element: (
+      <>
+        <Header />
+        <OrderSuccess />
+      </>
+    ),
+  },
+  {
+    path: "/orders",
+    element: (
+      <>
+        <Header />
+        <Orders />
+      </>
+    ),
+  },
+  {
+    path: "/order/:orderId/",
+    element: (
+      <>
+        <Header />
+        <Order />
+      </>
+    ),
   },
 ]);
 const queryClient = new QueryClient();

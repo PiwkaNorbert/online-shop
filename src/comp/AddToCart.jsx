@@ -1,6 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 
 const AddToCart = ({ id }) => {
+  const queryClient = useQueryClient();
+
   const addToCartHandler = async () => {
     const token = sessionStorage.getItem("token");
 
@@ -21,6 +24,8 @@ const AddToCart = ({ id }) => {
     );
     console.log(addQuery);
     if (!addQuery.ok) throw new Error("Could not add to cart");
+    queryClient.invalidateQueries({ queryKey: ["shoppingCart"] });
+
     const addData = await addQuery.json();
     return addData;
   };

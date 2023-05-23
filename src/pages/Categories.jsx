@@ -13,7 +13,7 @@ const Category = () => {
   }, [token]);
 
   const categoryQuery = useQuery(["category"], () =>
-    fetch("http://192.168.15.115:7777/categories/?format=json", {
+    fetch("http://192.168.15.115:7777/api/categories/?format=json", {
       method: "GET",
       headers: {
         Accept: "application/json",

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export default function LoginForm({ endpoint }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
+  const [loginCallback, setLoginCallback] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,20 +26,35 @@ export default function LoginForm({ endpoint }) {
         }
       );
       if (!response.ok) throw new Error(`Could not Send ${endpoint} data`);
-      if (endpoint === "register") {
-        return (window.location.href = "/login");
-        // console.log("breh");
-      }
+
+      console.log(response);
+      if (endpoint === "register") return (window.location.href = "/login");
+
       if (endpoint === "login") {
         const data = await response.json();
         sessionStorage.setItem("token", data.token);
         return (window.location.href = "/categories");
       }
     } catch (error) {
-      console.error(error);
-    } finally {
-      setName("");
+      if (!error?.response) {
+        setLoginCallback("No Server Response");
+        return setPassword("");
+      }
+
+      if (error.response?.status === 404)
+        return setLoginCallback("404 - Not Found");
+
+      if (endpoint === "login") {
+        return setLoginCallback(`
+        Couldn't log in, wrong username or password `);
+      }
+      if (endpoint === "register") {
+        return setLoginCallback(`
+        Error, couldn't register user`);
+      }
+      console.log(error.code);
       setPassword("");
+      throw new Error(`Could not send ${endpoint} data`);
     }
   };
   return (
@@ -78,6 +93,9 @@ export default function LoginForm({ endpoint }) {
             }}
             required
           />
+          {loginCallback && (
+            <p className="mb-3 text-red-500">{loginCallback}</p>
+          )}
           <button
             type="submit"
             value="Submit"
@@ -102,7 +120,7 @@ export default function LoginForm({ endpoint }) {
               <>
                 Already have an account?
                 <a
-                  href="/register"
+                  href="/login"
                   className="delay-250 text-center font-semibold transition ease-in-out"
                 >
                   <span className="block"> Log in </span>

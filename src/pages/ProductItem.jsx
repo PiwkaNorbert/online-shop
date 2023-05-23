@@ -16,7 +16,7 @@ const ProductItem = () => {
   }, [token]);
 
   const productItemQuery = useQuery(["product", productId], () =>
-    fetch(`http://192.168.15.115:7777/product/${productId}`, {
+    fetch(`http://192.168.15.115:7777/api/product/${productId}`, {
       method: "GET",
       headers: {
         Accept: "application/json",

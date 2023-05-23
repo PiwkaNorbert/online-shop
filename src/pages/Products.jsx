@@ -16,7 +16,7 @@ const Products = () => {
   const productQuery = useQuery(
     ["category", "productName", productName],
     () =>
-      fetch(`http://192.168.15.115:7777/category/${productName}`, {
+      fetch(`http://192.168.15.115:7777/api/category/${productName}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
