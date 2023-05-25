@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AddToCart from "../comp/AddToCart";
+import { API_URL } from "../config";
 
 const ProductItem = () => {
   const { productId } = useParams();
@@ -16,7 +17,7 @@ const ProductItem = () => {
   }, [token]);
 
   const productItemQuery = useQuery(["product", productId], () =>
-    fetch(`http://192.168.15.115:7777/api/product/${productId}`, {
+    fetch(`${API_URL}api/product/${productId}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -31,7 +32,9 @@ const ProductItem = () => {
   return (
     <div className="flex h-screen w-full flex-col text-slate-200">
       <div className="fixed right-0 top-0 m-6  cursor-pointer self-center rounded-full  text-slate-200 hover:animate-bounce hover:text-white"></div>
-      <h1 className="mb-8 mt-12">{productItemQuery?.data[0].product_name}</h1>
+      <h1 className="mb-8 mt-12 text-white ">
+        {productItemQuery?.data[0].product_name}
+      </h1>
       <div className=" flex  items-center justify-center gap-1  ">
         {productItemQuery?.data.map(
           ({ id, product_name, product_img_url, price, description }) => {
@@ -44,13 +47,7 @@ const ProductItem = () => {
                     alt={product_name}
                   />
                   <div className="flex flex-col items-start px-10 text-left">
-                    <p className="overflow-hidden pb-2 ">
-                      {description} Lorem ipsum dolor sit amet, consectetur
-                      adipisicing elit. Eligendi non quis exercitationem culpa
-                      nesciunt nihil aut nostrum explicabo reprehenderit optio
-                      amet ab temporibus asperiores quasi cupiditate. Voluptatum
-                      ducimus voluptates voluptas?
-                    </p>
+                    <p className="overflow-hidden pb-2 ">{description}</p>
 
                     <p className="pt-2 font-bold"> &#36;{price} </p>
                     <AddToCart id={id} />

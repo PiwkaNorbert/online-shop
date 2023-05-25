@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React from "react";
 import { useShoppingCartData } from "../API/useShoppingCartData";
+import { API_URL } from "../config";
 
 const Cart = () => {
   const token = sessionStorage.getItem("token");
@@ -9,16 +10,10 @@ const Cart = () => {
 
   const shoppingCartQuery = useShoppingCartData();
 
-  // if (shoppingCartQuery.isLoading) return <div>Loading...</div>;
-  // if (shoppingCartQuery.isError)
-  //   return <div>Error... {productQuery.error}</div>;
-
-  // const totalPrice =
-
   const handleShoppingCart = async (endpoint) => {
     if (token === null) return null;
     try {
-      const res = await fetch(`http://192.168.15.115:7777/${endpoint}/`, {
+      const res = await fetch(`${API_URL}${endpoint}/`, {
         headers: {
           Accept: "application/json",
 
@@ -44,9 +39,8 @@ const Cart = () => {
         {shoppingCartQuery.isLoading ? (
           <div>Loading...</div>
         ) : shoppingCartQuery?.data[0].items.length !== 0 ? (
-          <button>
+          <button className=" cursor-pointer text-red-500 hover:text-red-700 ">
             <a
-              className=" cursor-pointer text-red-500 hover:text-red-700 "
               onClick={() => {
                 handleShoppingCart(`clear-cart`);
               }}
@@ -67,7 +61,7 @@ const Cart = () => {
                 return (
                   <div
                     key={index}
-                    className=" .is-item  grid   grid-cols-5 items-center  gap-1  "
+                    className=" .is-item  flex flex-col items-center  gap-1 md:grid  md:grid-cols-5  "
                   >
                     <img
                       className="max-h-20 w-20 rounded-md"
@@ -76,30 +70,52 @@ const Cart = () => {
                     />
 
                     <p className="font-semibold text-white ">{name}</p>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center  gap-2">
                       <button
+                        disabled={shoppingCartQuery.isFetching}
+                        className=" p-2 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-50  "
                         onClick={() => {
                           handleShoppingCart(
                             `update-quantity/${index}/${(quantity -= 1)}`
                           );
                         }}
                       >
-                        -
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          className="cursor-pointer transition duration-300 ease-in-out hover:scale-125 hover:text-red-500"
+                          fill="currentColor"
+                          viewBox="0 0 256 256"
+                        >
+                          <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z"></path>
+                        </svg>
                       </button>
-                      <p>{quantity}</p>
+                      <span className="px-3">{quantity}</span>
                       <button
+                        disabled={shoppingCartQuery.isFetching}
+                        className=" p-2 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-50  "
                         onClick={() => {
                           handleShoppingCart(
                             `update-quantity/${index}/${(quantity += 1)}`
                           );
                         }}
                       >
-                        +
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          className="cursor-pointer  transition duration-300 ease-in-out   hover:scale-125 hover:text-green-500"
+                          fill="currentColor"
+                          viewBox="0 0 256 256"
+                        >
+                          <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+                        </svg>
                       </button>
                     </div>
-                    <p className="text-xl font-semibold">&#36;{price}</p>
+                    <p className=" text-xl font-semibold">&#36;{price}</p>
                     <button
-                      className="max-w-fit"
+                      className="max-w-fit "
                       onClick={() => {
                         handleShoppingCart(`delete-product/${index}`);
                       }}

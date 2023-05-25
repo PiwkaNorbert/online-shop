@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
+import { API_URL } from "../config";
 
 const AddToCart = ({ id }) => {
   const queryClient = useQueryClient();
@@ -12,18 +13,15 @@ const AddToCart = ({ id }) => {
       throw new Error("No token");
     }
 
-    const addQuery = await fetch(
-      `http://192.168.15.115:7777/add-to-cart/${id}/`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Token ${token}`,
-        },
-      }
-    );
-    console.log(addQuery);
+    const addQuery = await fetch(`${API_URL}add-to-cart/${id}/`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Token ${token}`,
+      },
+    });
     if (!addQuery.ok) throw new Error("Could not add to cart");
+    console.log("Added to cart");
     queryClient.invalidateQueries({ queryKey: ["shoppingCart"] });
 
     const addData = await addQuery.json();

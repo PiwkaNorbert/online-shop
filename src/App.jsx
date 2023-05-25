@@ -14,6 +14,7 @@ import Header from "./comp/Header";
 import OrderSuccess from "./pages/OrderSuccess";
 import Orders from "./pages/Orders";
 import Order from "./pages/Order";
+import Payment from "./pages/Payment";
 
 const router = createBrowserRouter([
   {
@@ -21,15 +22,15 @@ const router = createBrowserRouter([
     element: <Homepage />,
   },
   {
-    path: "/register",
+    path: "register",
     element: <Register />,
   },
   {
-    path: "/login",
+    path: "login",
     element: <Login />,
   },
   {
-    path: "/categories",
+    path: "categories",
     element: (
       <>
         <Header />
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/category/:productName/",
+    path: "categories/:categoryName",
     element: (
       <>
         <Header />
@@ -46,8 +47,9 @@ const router = createBrowserRouter([
       </>
     ),
   },
+
   {
-    path: "/product/:productId/",
+    path: "categories/:categoryName/:productId/",
     element: (
       <>
         <Header />
@@ -56,7 +58,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/cart/",
+    path: "cart",
     element: (
       <>
         <Header />
@@ -65,7 +67,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/order-success/",
+    path: "order-success",
     element: (
       <>
         <Header />
@@ -74,7 +76,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/orders",
+    path: "orders",
     element: (
       <>
         <Header />
@@ -83,11 +85,20 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/order/:orderId/",
+    path: "order/:orderId",
     element: (
       <>
         <Header />
         <Order />
+      </>
+    ),
+  },
+  {
+    path: "payment",
+    element: (
+      <>
+        <Header />
+        <Payment />
       </>
     ),
   },

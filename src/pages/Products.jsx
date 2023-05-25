@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../config";
 
 const Products = () => {
-  const { productName } = useParams();
+  const { categoryName } = useParams();
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
@@ -14,9 +15,9 @@ const Products = () => {
   }, [token]);
 
   const productQuery = useQuery(
-    ["category", "productName", productName],
+    ["category", "categoryName", categoryName],
     () =>
-      fetch(`http://192.168.15.115:7777/api/category/${productName}`, {
+      fetch(`${API_URL}api/category/${categoryName}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -25,7 +26,7 @@ const Products = () => {
       }).then((res) => res.json()),
     {
       refetchOnWindowFocus: false,
-      enabled: !!token && !!productName,
+      enabled: !!token && !!categoryName,
     }
   );
 
@@ -35,11 +36,15 @@ const Products = () => {
   if (productQuery.isError) return <div>Error... {productQuery.error}</div>;
   return (
     <div className="flex h-screen w-full flex-col text-slate-200">
-      <h1 className="mb-8 mt-12">Products</h1>
+      <h1 className="mb-8 mt-12 text-white ">Products</h1>
       <div
         className=" flex  items-center justify-center gap-4  "
         onClick={(e) => {
-          navigate(`/product/${e.target.closest(".is-item").dataset.item}`);
+          navigate(
+            `/categories/${categoryName}/${
+              e.target.closest(".is-item").dataset.item
+            }`
+          );
         }}
       >
         {productQuery?.data.map(

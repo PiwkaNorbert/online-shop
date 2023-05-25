@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 
 const Category = () => {
   const token = sessionStorage.getItem("token");
@@ -13,7 +14,7 @@ const Category = () => {
   }, [token]);
 
   const categoryQuery = useQuery(["category"], () =>
-    fetch("http://192.168.15.115:7777/api/categories/?format=json", {
+    fetch(`${API_URL}api/categories/?format=json`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -28,10 +29,10 @@ const Category = () => {
   if (categoryQuery.isError) return <div>Error... {categoryQuery.error}</div>;
   return (
     <div className=" flex h-screen w-full flex-col items-center text-slate-200 ">
-      <h1 className="mb-8 mt-12">Categories</h1>
+      <h1 className="mb-8 mt-12 text-white ">Categories</h1>
       <div
         className=" mt-6 flex gap-2 rounded-2xl "
-        onClick={(e) => navigate(`/category/${e.target.innerText}`)}
+        onClick={(e) => navigate(`/categories/${e.target.innerText}`)}
       >
         {categoryQuery?.data.map((category) => {
           return (

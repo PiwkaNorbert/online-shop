@@ -1,23 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
+import { API_URL } from "../config";
 
 export function useShoppingCartData() {
   const token = sessionStorage.getItem("token");
-  console.log(!token);
-  if (token.length === 0) return null;
-  const shoppingCartQuery = useQuery(["shoppingCart"], async () => {
-    const res = await fetch(`http://192.168.15.115:7777/shopping-cart/`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Token ${token}`,
-      },
-    });
-    if (!res.ok) {
-      throw new Error("Something went wrong");
-    }
-    const data = await res.json();
-    return data;
-  });
+
+  const shoppingCartQuery = useQuery(
+    ["shoppingCart"],
+    async () => {
+      const res = await fetch(`${API_URL}shopping-cart/`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Token ${token}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error("Something went wrong");
+      }
+      const data = await res.json();
+      return data;
+    },
+    { enabled: token !== null }
+  );
 
   return shoppingCartQuery;
 }

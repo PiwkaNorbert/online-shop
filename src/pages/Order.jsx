@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
+import PayButton from "../comp/PayButton";
 
 const Order = () => {
   const token = sessionStorage.getItem("token");
@@ -22,57 +23,53 @@ const Order = () => {
       throw new Error("Something went wrong");
     }
     const data = await res.json();
-    console.log(data);
     return data;
   });
-  console.log(orderQuery.data);
 
   if (orderQuery.isLoading) return <div>Loading...</div>;
   if (orderQuery.isError) return <div>Error... {orderQuery.error}</div>;
   return (
-    <div className="mt-12 flex w-full flex-col items-center justify-center text-slate-300">
+    <div className="mt-12 flex w-full flex-col items-center justify-center text-white/80">
       <div className="rounded-2xl border border-slate-200/20 bg-bkg-2 p-5  ">
-        <h1 className="mb-3 text-3xl ">Orders</h1>
+        <h1 className="mb-3 text-3xl ">Order {orderId}</h1>
         {orderQuery.isLoading ? (
           <div>Loading...</div>
         ) : orderQuery.isSuccess ? (
           orderQuery?.data.map(
-            ({ id, done, items, payment_url, total_price, user }) => {
+            ({ id, done, items, payment_url, total_price, user }, index) => {
               return (
-                <div key={id} className="flex flex-col">
-                  <div className="flex justify-between">
-                    <div className="flex flex-col">
-                      <div className="flex gap-2">
-                        <a
-                          className="cursor-pointer text-accent-1"
-                          href={`/order/${id}`}
-                        >
-                          <span className="font-bold"> Order ID: </span>
-                          {id}
-                        </a>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <span className="font-bold">Total Price:</span>
-                        <span>&#36; {total_price}</span>
+                <div key={index} className="flex flex-col">
+                  <div className="mb-5 flex flex-col  border-b border-white/20 pb-2 text-base ">
+                    <div className="mt-2">
+                      <span className="flex gap-2  text-sm"> Total Price</span>
+                      <div className="flex gap-2 font-semibold text-white">
+                        <span>{total_price} USD</span>
                       </div>
                     </div>
-                    <div className="flex flex-col">
-                      <div className="flex gap-2">
-                        <span className="font-bold">Done:</span>
-                        <span>{done ? "Yes" : "No"}</span>
-                      </div>
-                      <div className="flex gap-2">
-                        <span className="font-bold">Items:</span>
-                        <span>
-                          {items.map((item) => {
-                            return <span key={item.id}>{item.name}, </span>;
-                          })}
-                        </span>
+                    <div className="mt-2">
+                      <span className="flex gap-2  text-sm">Items</span>
+                      <div className="flex gap-2 font-semibold text-white">
+                        {items.map((item) => {
+                          return (
+                            <span key={item.id}>
+                              {item.quantity}x {item.name} |
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
-                  <hr className="my-2" />
+                  {done ? (
+                    <p
+                      className={`font-semibold ${
+                        done ? "text-accent-1" : "text-red-500"
+                      } `}
+                    >
+                      Paid
+                    </p>
+                  ) : (
+                    <PayButton />
+                  )}
                 </div>
               );
             }

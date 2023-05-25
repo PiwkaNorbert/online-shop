@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../config";
 
 export default function LoginForm({ endpoint }) {
   const [name, setName] = useState("");
@@ -14,17 +15,14 @@ export default function LoginForm({ endpoint }) {
     };
 
     try {
-      const response = await fetch(
-        `http://192.168.15.115:7777/api/${endpoint}/`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API_URL}api/${endpoint}/`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
       if (!response.ok) throw new Error(`Could not Send ${endpoint} data`);
 
       console.log(response);
